@@ -1,7 +1,9 @@
+/// <reference types="vitest/config" />
+
 import {defineConfig} from 'vite'
 import react from '@vitejs/plugin-react'
 import {crx, defineManifest} from "@crxjs/vite-plugin";
-import packageJson from './package.json'
+import packageJson from "./package.json";
 
 const {version} = packageJson
 
@@ -26,8 +28,17 @@ const manifest = defineManifest(async (env) => ({
     ],
     action: {
         default_popup: 'index.html'
-    }
+    },
+    // background: {
+    //     service_worker: "src/background.ts",
+    //     type: "module"
+    // }
 }))
 export default defineConfig({
     plugins: [react(), crx({manifest})],
+    test: {
+        environment: "jsdom",
+        setupFiles: ["test-setup.js"],
+        globals: true
+    }
 })
